@@ -6,8 +6,10 @@ import android.os.Bundle;
 import com.example.wzeqiu.myopengles1.es.ESGLSurfaceView;
 import com.example.wzeqiu.myopengles1.es_native.Native;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.IOException;
+import java.io.InputStream;
 
+public class MainActivity extends AppCompatActivity {
 
 
     @Override

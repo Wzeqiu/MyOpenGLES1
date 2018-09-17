@@ -1,10 +1,9 @@
 #include <jni.h>
-#include <string>
-#include<GLES3/gl3.h>
-#include<GLES3/gl3ext.h>
+#include<android/log.h>
 #include<android/asset_manager.h>
 #include<android/asset_manager_jni.h>
-#include<android/log.h>
+#include<GLES3/gl3.h>
+#include<GLES3/gl3ext.h>
 
 #define TAG "OPENGLES_JNI" // 这个是自定义的LOG的标识
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,TAG ,__VA_ARGS__) // 定义LOGD类型
@@ -14,20 +13,107 @@
 #define LOGF(...) __android_log_print(ANDROID_LOG_FATAL,TAG ,__VA_ARGS__) // 定义LOGF类型
 
 
+GLuint LoadVertexShader(AAssetManager *aAssetManager, const char *filename);
+
+GLuint LoadFragmentShader(AAssetManager *aAssetManager, const char *filename);
+
+GLuint LoadShader(GLenum type, const char *shaderSrc);
+
+char *readShaderBuff(AAssetManager *aAssetManager, const char *name);
+
+/**
+ *
+ */
+GLuint LinkProgram();
+
+
 AAssetManager *aAssetManager = nullptr;
 
-struct UserData{
+struct UserData {
     GLuint programObject;
-} ;
-UserData * userData=new UserData;
+};
+UserData *userData = new UserData;
+
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_wzeqiu_myopengles1_es_1native_Native_InitAsseManager(JNIEnv *env, jclass type,
+                                                                      jobject am) {
+    aAssetManager = AAssetManager_fromJava(env, am);
+    if (aAssetManager == NULL) {
+        LOGE(" InitAsseManager aAssetManager is %s", "aAssetManager==NULL");
+        return;
+    }
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_wzeqiu_myopengles1_es_1native_Native_InitOpenGL(JNIEnv *env, jclass type) {
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    GLuint programId = LinkProgram();
+    glUseProgram(programId);
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_wzeqiu_myopengles1_es_1native_Native_OnViewportChanged(JNIEnv *env, jclass type,
+                                                                        jfloat width,
+                                                                        jfloat height) {
+    glViewport(0, 0, width, height);
+
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_wzeqiu_myopengles1_es_1native_Native_RenderOneFrame(JNIEnv *env, jclass type) {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    GLfloat vVertices[] = {0.0f, 0.5f, 0.0f,
+                           -0.5f, -0.5f, 0.0f,
+                           0.5f, -0.5f, 0.0f
+    };
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vVertices);
+    glEnableVertexAttribArray(0);
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+
+char *readShaderBuff(AAssetManager *aAssetManager, const char *filename) {
+    LOGE(" shader file name is %s", filename);
+    if (aAssetManager == NULL) {
+        LOGE(" getbuff aAssetManager is aAssetManager==NULL");
+        return NULL;
+    }
+    AAsset *asset = AAssetManager_open(aAssetManager, filename, AASSET_MODE_UNKNOWN);
+    if (asset == NULL) {
+        LOGE(" AAssetManager_open  asset==NULL");
+        return NULL;
+    }
+    off_t bufferSize = AAsset_getLength(asset);
+    LOGI(" asset size        : %d\n", bufferSize);
+    char *buffer = new char[bufferSize + 1];
+    buffer[bufferSize] = '\0';
+    int numByteRead = AAsset_read(asset, buffer, bufferSize);
+    LOGI(" numByteRead        : %d\n", numByteRead);
+    LOGI(" read buffer is :%s", buffer);
+    return buffer;
+}
+
+GLuint LoadVertexShader(AAssetManager *aAssetManager, const char *filename) {
+    char *vertex_shader = readShaderBuff(aAssetManager, filename);
+    GLuint vertex = LoadShader(GL_VERTEX_SHADER, vertex_shader);
+    delete vertex_shader;
+    return vertex;
+}
+
+GLuint LoadFragmentShader(AAssetManager *aAssetManager, const char *filename) {
+    char *fragment_shader = readShaderBuff(aAssetManager, filename);
+    GLuint fragment = LoadShader(GL_FRAGMENT_SHADER, fragment_shader);
+    delete fragment_shader;
+    return fragment;
+}
 
 GLuint LoadShader(GLenum type, const char *shaderSrc) {
-
     GLuint shader;
     GLint compiled;
     shader = glCreateShader(type);
     if (shader == 0) {
-        LOGE("CREATE SHADER IS FAIL TYPE%d", type);
+        LOGE("create shader is fail type : %d==", type);
         return 0;
     }
     glShaderSource(shader, 1, &shaderSrc, NULL);
@@ -39,60 +125,28 @@ GLuint LoadShader(GLenum type, const char *shaderSrc) {
         if (infoLen > 0) {
             char *infoLog = new char[sizeof(char) + infoLen];
             glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
-            delete[] infoLog;
+            LOGE("glShaderSource log is : %s", infoLog);
+            delete infoLog;
         }
         glDeleteShader(shader);
         return 0;
     }
     return shader;
-
-
 }
 
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_example_wzeqiu_myopengles1_es_1native_Native_InitAsseManager(JNIEnv *env, jclass type,
-                                                                      jobject am) {
-    aAssetManager = AAssetManager_fromJava(env, am);
-    // TODO
-
-}extern "C"
-JNIEXPORT void JNICALL
-Java_com_example_wzeqiu_myopengles1_es_1native_Native_InitOpenGL(JNIEnv *env, jclass type) {
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-
-    char vShaderStr[] =
-            "#version 300 es                          \n"
-                    "layout(location = 0) in vec4 vPosition;  \n"
-                    "void main()                              \n"
-                    "{                                        \n"
-                    "   gl_Position = vPosition;              \n"
-                    "}                                        \n";
-
-    char fShaderStr[] =
-            "#version 300 es                              \n"
-                    "precision mediump float;                     \n"
-                    "out vec4 fragColor;                          \n"
-                    "void main()                                  \n"
-                    "{                                            \n"
-                    "   fragColor = vec4 ( 1.0, 0.0, 0.0, 1.0 );  \n"
-                    "}                                            \n";
-
-    GLuint vertexShader;
-    GLuint fragmentShader;
-    GLuint programObject;
+GLuint LinkProgram() {
     GLint linked;
-
     // Load the vertex/fragment shaders
-    vertexShader = LoadShader(GL_VERTEX_SHADER, vShaderStr);
-    fragmentShader = LoadShader(GL_FRAGMENT_SHADER, fShaderStr);
+    // 顶点
+    GLuint vertexShader = LoadVertexShader(aAssetManager, "vertex_shader.glsl");
+    // 片元
+    GLuint fragmentShader = LoadFragmentShader(aAssetManager, "fragment_shader.glsl");
 
     // Create the program object
-    programObject = glCreateProgram();
+    GLuint programObject = glCreateProgram();
 
     if (programObject == 0) {
-        LOGE("CREATE PROGRAM IS FAIL ");
+        LOGE("create program is fail");
     }
 
     glAttachShader(programObject, vertexShader);
@@ -111,11 +165,9 @@ Java_com_example_wzeqiu_myopengles1_es_1native_Native_InitOpenGL(JNIEnv *env, jc
 
         if (infoLen > 1) {
             char *infoLog = new char[sizeof(char) * infoLen];
-
             glGetProgramInfoLog(programObject, infoLen, NULL, infoLog);
-//            esLogMessage ( "Error linking program:\n%s\n", infoLog );
-
-            delete[]  infoLog;
+            LOGE("Error linking program : %s", infoLog);
+            delete infoLog;
         }
 
         glDeleteProgram(programObject);
@@ -123,38 +175,6 @@ Java_com_example_wzeqiu_myopengles1_es_1native_Native_InitOpenGL(JNIEnv *env, jc
     }
 
     // Store the program object
-    LOGE("CREATE programObject%d ",programObject);
-    userData->programObject = programObject;
-    // TODO
-
-}extern "C"
-JNIEXPORT void JNICALL
-Java_com_example_wzeqiu_myopengles1_es_1native_Native_OnViewportChanged(JNIEnv *env, jclass type,
-                                                                        jfloat width,
-                                                                        jfloat height) {
-    glViewport(0, 0, width, height);
-
-    // TODO
-
-}extern "C"
-JNIEXPORT void JNICALL
-Java_com_example_wzeqiu_myopengles1_es_1native_Native_RenderOneFrame(JNIEnv *env, jclass type) {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    GLfloat vVertices[] = {0.0f, 0.5f, 0.0f,
-                           -0.5f, -0.5f, 0.0f,
-                           0.5f, -0.5f, 0.0f
-    };
-
-    // Use the program object
-    LOGE("RenderOneFrame programObject%d ",userData->programObject);
-    glUseProgram(userData->programObject);
-
-    // Load the vertex data
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vVertices);
-    glEnableVertexAttribArray(0);
-
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    // TODO
-
+    LOGI("CREATE programObject : %d ", programObject);
+    return programObject;
 }
-
