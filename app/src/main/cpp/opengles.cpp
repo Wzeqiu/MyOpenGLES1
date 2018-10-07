@@ -126,7 +126,7 @@ GLuint LoadShader(GLenum type, const char *shaderSrc) {
             char *infoLog = new char[sizeof(char) + infoLen];
             glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
             LOGE("glShaderSource log is : %s", infoLog);
-            delete infoLog;
+            delete[] infoLog;
         }
         glDeleteShader(shader);
         return 0;
@@ -167,7 +167,7 @@ GLuint LinkProgram() {
             char *infoLog = new char[sizeof(char) * infoLen];
             glGetProgramInfoLog(programObject, infoLen, NULL, infoLog);
             LOGE("Error linking program : %s", infoLog);
-            delete infoLog;
+            delete[] infoLog;
         }
 
         glDeleteProgram(programObject);
