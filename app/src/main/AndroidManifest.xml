@@ -16,6 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activitys.TriangleActivity" />
+        <activity android:name=".activitys.ShadderActivity"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.wzeqiu.myopengles1.es;
+package com.example.wzeqiu.myopengles1.es.shadder;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;

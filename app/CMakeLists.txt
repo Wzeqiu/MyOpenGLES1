@@ -17,7 +17,11 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             src/main/cpp/opengles.cpp )
+             src/main/cpp/triangle/triangle.cpp
+             src/main/cpp/shaders/shaders.cpp
+             src/main/cpp/utils/gl_utils.cpp
+
+              )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
