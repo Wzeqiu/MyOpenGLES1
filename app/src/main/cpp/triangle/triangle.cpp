@@ -8,8 +8,8 @@ JNIEXPORT void JNICALL
 Java_com_example_wzeqiu_myopengles1_es_1native_triangle_Native_TriangleInitOpenGL(JNIEnv *env,
                                                                                   jclass type) {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    programId[0] = LinkProgram("triangle/uniform_vertex_shader.glsl", "triangle/blue_fragment_shader.glsl");
-    programId[1] = LinkProgram("triangle/uniform_vertex_shader.glsl",
+    programId[0] = LinkProgram("triangle/vertex_shader.glsl", "triangle/blue_fragment_shader.glsl");
+    programId[1] = LinkProgram("triangle/vertex_shader.glsl",
                                "triangle/yellow_fragment_shader.glsl");
 
 
