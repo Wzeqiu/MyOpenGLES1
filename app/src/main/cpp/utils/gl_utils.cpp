@@ -18,7 +18,7 @@ Java_com_example_wzeqiu_myopengles1_es_1native_UtilsNative_InitAsseManager(JNIEn
 }
 
 char *readShaderBuff(AAssetManager *aAssetManager, const char *filename) {
-    LOGE(" shader file name is %s", filename);
+    LOGI(" shader file name is %s", filename);
     if (aAssetManager == NULL) {
         LOGE(" getbuff aAssetManager is aAssetManager==NULL");
         return NULL;
@@ -34,7 +34,7 @@ char *readShaderBuff(AAssetManager *aAssetManager, const char *filename) {
     buffer[bufferSize] = '\0';
     int numByteRead = AAsset_read(asset, buffer, bufferSize);
     LOGI(" numByteRead        : %d\n", numByteRead);
-    LOGI(" read buffer is :%s", buffer);
+//    LOGI(" read buffer is :%s", buffer);
     return buffer;
 }
 

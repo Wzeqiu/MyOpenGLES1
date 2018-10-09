@@ -17,8 +17,15 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
+
+
+             # 三角形
              src/main/cpp/triangle/triangle.cpp
+             # 着色器
              src/main/cpp/shaders/shaders.cpp
+             # 纹理
+             src/main/cpp/textures/texture.cpp
+             # 公共
              src/main/cpp/utils/gl_utils.cpp
 
               )

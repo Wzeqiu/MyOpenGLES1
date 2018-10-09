@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.wzeqiu.myopengles1.activitys.ShadderActivity;
+import com.example.wzeqiu.myopengles1.activitys.TexturesActivity;
 import com.example.wzeqiu.myopengles1.activitys.TriangleActivity;
 import com.example.wzeqiu.myopengles1.es_native.UtilsNative;
 
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         data.add(TriangleActivity.class);
         data.add(ShadderActivity.class);
+        data.add(TexturesActivity.class);
 
         mListView = findViewById(R.id.listview);
         mListView.setAdapter(new MyAdapter());
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             TextView textView = new TextView(MainActivity.this);
             textView.setText(data.get(position).getSimpleName());
             textView.setGravity(Gravity.CENTER);
-            textView.setPadding(0, 10, 0, 10);
+            textView.setPadding(0, 20, 0, 20);
             textView.setTextSize(20);
 
             return textView;

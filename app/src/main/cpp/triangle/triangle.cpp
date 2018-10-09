@@ -1,6 +1,6 @@
 #include "../utils/gl_utils.h"
 
-static GLuint VBO[2], VAO[2];
+static GLuint VBO[2], VAO[2]; // 顶点数组对象，顶点缓存对象
 static GLuint programId[2];
 
 extern "C"
@@ -9,8 +9,7 @@ Java_com_example_wzeqiu_myopengles1_es_1native_triangle_Native_TriangleInitOpenG
                                                                                   jclass type) {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     programId[0] = LinkProgram("triangle/vertex_shader.glsl", "triangle/blue_fragment_shader.glsl");
-    programId[1] = LinkProgram("triangle/vertex_shader.glsl",
-                               "triangle/yellow_fragment_shader.glsl");
+    programId[1] = LinkProgram("triangle/vertex_shader.glsl", "triangle/yellow_fragment_shader.glsl");
 
 
 //    GLfloat vVertices[] = {
