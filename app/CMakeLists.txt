@@ -18,7 +18,8 @@ add_library( # Sets the name of the library.
 
              # Provides a relative path to your source file(s).
 
-
+             # 公共
+             src/main/cpp/position_chanage/PositionChanage.cpp
              # 三角形
              src/main/cpp/triangle/triangle.cpp
              # 着色器
@@ -27,6 +28,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/textures/texture.cpp
              # 公共
              src/main/cpp/utils/gl_utils.cpp
+
 
               )
 

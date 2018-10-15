@@ -1,8 +1,8 @@
 package com.example.wzeqiu.myopengles1;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.wzeqiu.myopengles1.activitys.PositionChanageActivity;
 import com.example.wzeqiu.myopengles1.activitys.ShadderActivity;
 import com.example.wzeqiu.myopengles1.activitys.TexturesActivity;
 import com.example.wzeqiu.myopengles1.activitys.TriangleActivity;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         data.add(TriangleActivity.class);
         data.add(ShadderActivity.class);
         data.add(TexturesActivity.class);
+        data.add(PositionChanageActivity.class);
 
         mListView = findViewById(R.id.listview);
         mListView.setAdapter(new MyAdapter());
