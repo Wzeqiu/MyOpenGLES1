@@ -7,7 +7,7 @@
 
 #include "../utils/stb_image.h"
 
-GLint programID;
+static GLint programID;
 static GLuint VAO, VBO, EBO, texture1, texture2; // 顶点数组对象，顶点缓存对象，索引缓存对象,纹理
 extern "C"
 JNIEXPORT void JNICALL

@@ -18,7 +18,10 @@ add_library( # Sets the name of the library.
 
              # Provides a relative path to your source file(s).
 
-             # 公共
+
+             # 坐标系统
+             src/main/cpp/coordinate/Coordinate.cpp
+             # 转换
              src/main/cpp/position_chanage/PositionChanage.cpp
              # 三角形
              src/main/cpp/triangle/triangle.cpp
@@ -68,5 +71,6 @@ target_link_libraries( # Specifies the target library.
                        ${OPENGLES3_LIBRARY}
                        ${EGL_LIBRARY}
                        # opengles end
+
 
                         )

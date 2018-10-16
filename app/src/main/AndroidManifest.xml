@@ -22,7 +22,8 @@
         <activity android:name=".activitys.TriangleActivity" />
         <activity android:name=".activitys.ShadderActivity" />
         <activity android:name=".activitys.TexturesActivity" />
-        <activity android:name=".activitys.PositionChanageActivity"></activity>
+        <activity android:name=".activitys.PositionChanageActivity" />
+        <activity android:name=".activitys.CoordinateActivity"></activity>
     </application>
 
 </manifest>

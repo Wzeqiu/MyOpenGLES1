@@ -4,7 +4,7 @@
 
 #include "gl_utils.h"
 
-AAssetManager *aAssetManager = nullptr;
+AAssetManager *aAssetManager ;
 
 extern "C"
 JNIEXPORT void JNICALL

@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.wzeqiu.myopengles1.activitys.CoordinateActivity;
 import com.example.wzeqiu.myopengles1.activitys.PositionChanageActivity;
 import com.example.wzeqiu.myopengles1.activitys.ShadderActivity;
 import com.example.wzeqiu.myopengles1.activitys.TexturesActivity;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         data.add(ShadderActivity.class);
         data.add(TexturesActivity.class);
         data.add(PositionChanageActivity.class);
+        data.add(CoordinateActivity.class);
 
         mListView = findViewById(R.id.listview);
         mListView.setAdapter(new MyAdapter());

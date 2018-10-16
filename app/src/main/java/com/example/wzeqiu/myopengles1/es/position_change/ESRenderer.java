@@ -2,7 +2,7 @@ package com.example.wzeqiu.myopengles1.es.position_change;
 
 import android.opengl.GLSurfaceView;
 
-import com.example.wzeqiu.myopengles1.es_native.position_change.Native;
+import com.example.wzeqiu.myopengles1.es_native.positionchange.Native;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -14,6 +14,7 @@ class ESRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
         Native.PositionChanageInitOpenGL();
+
     }
 
     @Override
