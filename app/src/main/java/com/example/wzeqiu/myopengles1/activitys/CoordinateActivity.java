@@ -1,9 +1,9 @@
 package com.example.wzeqiu.myopengles1.activitys;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.wzeqiu.myopengles1.es.coordinate.ESGLSurfaceView;
@@ -14,13 +14,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class CoordinateActivity extends AppCompatActivity {
+public class CoordinateActivity extends Activity {
 
     private static String TAG = "CoordinateActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(new ESGLSurfaceView(this));
 
         new Thread(new Runnable() {
@@ -74,4 +76,5 @@ public class CoordinateActivity extends AppCompatActivity {
         myInput.close();
         myOutput.close();
     }
+
 }

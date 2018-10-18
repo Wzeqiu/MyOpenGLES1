@@ -11,8 +11,8 @@
 static GLuint programID;
 static GLuint VAO, VBO, EBO;
 static GLuint texture1, texture2;
-static jfloat scr_width,scr_height;
-
+static jfloat scr_width, scr_height;
+jfloat chanageAngle=0, deviationX=1, deviationY=1;
 
 extern "C"
 JNIEXPORT void JNICALL
@@ -22,11 +22,47 @@ Java_com_example_wzeqiu_myopengles1_es_1native_coordinate_Native_CoordinateInitO
     programID = LinkProgram("coordinate/texture_vertex.glsl", "coordinate/texture_fragment.glsl");
 
     GLfloat vertices[] = {
-            // positions          // texture coords
-            0.5f, 0.5f, 0.0f, 1.0f, 1.0f, // top right
-            0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
-            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f  // top left
+            -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+            0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+            0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+            -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+
+            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+            0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+            0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+            0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+            -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
+            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+
+            -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+            -0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+            -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+            0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+            0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+            0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+            0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+            0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+            0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+            0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+
+            -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+            0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+            0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+            0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+            -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+            -0.5f, 0.5f, -0.5f, 0.0f, 1.0f
     };
 
     GLuint indices[] = {
@@ -49,44 +85,47 @@ Java_com_example_wzeqiu_myopengles1_es_1native_coordinate_Native_CoordinateInitO
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void *) 0);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5* sizeof(GLfloat),(void*)(3* sizeof(GLfloat)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat),
+                          (void *) (3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
 
-    glGenTextures(1,&texture1);
+    glGenTextures(1, &texture1);
     glBindTexture(GL_TEXTURE_2D, texture1);
 
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     stbi_set_flip_vertically_on_load(true);
-    int width,height,nrChannels;
-    GLboolean  *data=stbi_load("/sdcard/MyOpenGLES1/assets/coordinate/container.jpg",&width,&height,&nrChannels,0);
-    if (data){
-        glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,data);
+    int width, height, nrChannels;
+    GLboolean *data = stbi_load("/sdcard/MyOpenGLES1/assets/coordinate/container.jpg", &width,
+                                &height, &nrChannels, 0);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-    }else{
+    } else {
         LOGE("coordinate  data is null");
     }
     stbi_image_free(data);
 
-     glGenTextures(1,&texture2);
+    glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture2);
 
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     stbi_set_flip_vertically_on_load(true);
-      data=stbi_load("/sdcard/MyOpenGLES1/assets/coordinate/awesomeface.png",&width,&height,&nrChannels,0);
-    if (data){
-        glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,data);
+    data = stbi_load("/sdcard/MyOpenGLES1/assets/coordinate/awesomeface.png", &width, &height,
+                     &nrChannels, 0);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-    }else{
+    } else {
         LOGE("coordinate  data is null");
     }
     stbi_image_free(data);
@@ -94,8 +133,8 @@ Java_com_example_wzeqiu_myopengles1_es_1native_coordinate_Native_CoordinateInitO
 JNIEXPORT void JNICALL
 Java_com_example_wzeqiu_myopengles1_es_1native_coordinate_Native_CoordinateOnViewportChanged(
         JNIEnv env, jclass type, jfloat width, jfloat height) {
-    scr_width=width;
-    scr_height=height;
+    scr_width = width;
+    scr_height = height;
     glViewport(0, 0, width, height);
 
 }extern "C"
@@ -103,31 +142,42 @@ JNIEXPORT void JNICALL
 Java_com_example_wzeqiu_myopengles1_es_1native_coordinate_Native_CoordinateRenderOneFrame(
         JNIEnv env, jclass type) {
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
     glUseProgram(programID);
-    glUniform1i(glGetUniformLocation(programID,"texture1"),0);
-    glUniform1i(glGetUniformLocation(programID,"texture2"),1);
+    glUniform1i(glGetUniformLocation(programID, "texture1"), 0);
+    glUniform1i(glGetUniformLocation(programID, "texture2"), 1);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,texture1);
+    glBindTexture(GL_TEXTURE_2D, texture1);
 
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D,texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2);
 
-    glm::mat4 model=glm::mat4(1.0f);
-    glm::mat4 view=glm::mat4(1.0f);
-    glm::mat4 projection=glm::mat4(1.0f);
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 view = glm::mat4(1.0f);
+    glm::mat4 projection = glm::mat4(1.0f);
 
-    model=glm::rotate(model,glm::radians(-55.0f),glm::vec3(1.0f, 0.0f, 0.0f));
-    view=glm::translate(view,glm::vec3(0.0f, 0.0f, -3.0f));
-    projection=glm::perspective(glm::radians(45.0f),scr_width/scr_height,0.1f,100.0f);
+    model = glm::rotate(model, glm::radians(chanageAngle), glm::vec3(deviationX, deviationY, 0.0f));
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    projection = glm::perspective(glm::radians(45.0f), scr_width / scr_height, 0.1f, 100.0f);
 
-    glUniformMatrix4fv(glGetUniformLocation(programID,"model"),1,GL_FALSE,glm::value_ptr(model));
-    glUniformMatrix4fv(glGetUniformLocation(programID,"view"),1,GL_FALSE,glm::value_ptr(view));
-    glUniformMatrix4fv(glGetUniformLocation(programID,"projection"),1,GL_FALSE,glm::value_ptr(projection));
-
+    glUniformMatrix4fv(glGetUniformLocation(programID, "model"), 1, GL_FALSE,
+                       glm::value_ptr(model));
+    glUniformMatrix4fv(glGetUniformLocation(programID, "view"), 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(glGetUniformLocation(programID, "projection"), 1, GL_FALSE,
+                       glm::value_ptr(projection));
 
 
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+//    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_wzeqiu_myopengles1_es_1native_coordinate_Native_CoordinateChanage(
+        JNIEnv env, jclass type, jfloat angle, jfloat x, jfloat y) {
+    LOGE("data chanage >>> %f   x>>> %f  y>>> %f", angle, x, y);
+    chanageAngle = angle;
+    deviationX = x;
+    deviationX = y;
 
 }
